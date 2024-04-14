@@ -1,4 +1,5 @@
 import evaluate as ev
+import time
 
 def make_computer_choice(game, color): # game 의 상태에서 computer가 다음 선택을 출력
     tmp_game = {"b": game["b"].copy(), "w": game["w"].copy()}
@@ -7,7 +8,7 @@ def make_computer_choice(game, color): # game 의 상태에서 computer가 다�
     else:
         depth = 3
         candidate_points = make_candidate_board(game, depth)
-        heuristic_score, search_position = alpha_beta_search(tmp_game, candidate_points, depth, color, float("-inf"), float("inf"))
+        _, search_position = alpha_beta_search(tmp_game, candidate_points, depth, color, float("-inf"), float("inf"))
     return search_position
 
 
@@ -80,10 +81,17 @@ def make_candidate_board(game, depth): # 모든 보드를 탐색하는 것이 �
     
     limit = min((depth+1)//2, len(points))
     
+    
     left_limit = max(1, left_end - limit)
     right_limit = min(19, right_end + limit)
     top_limit = max(1, top_end - limit)
     bottom_limit = min(19, bottom_end + limit)
+
+    search_board_area = (right_limit - left_limit + 1) * (bottom_limit - top_limit + 1)
+    num_can_use_points = search_board_area - len(points)
+    
+    if( num_can_use_points > 55):
+        limit = 1
 
     candidate_points = []
 

@@ -10,9 +10,15 @@ def evaluate(game, color): # 현재 게임의 우열을 결정하는 heuristic f
         computer = "w"
         player = "b"
     
-    evaluation_score = two_stone_one_block(game, computer, player) + two_stone_no_block(game, computer, player) + three_stone_one_block(game, computer, player) + three_stone_no_block(game, computer, player) + four_stone_two_block(game, computer, player) + four_stone_one_block(game, computer, player) + four_stone_no_block(game, computer, player) + five_stone(game, computer, player)
+    if ( five_stone(game, computer, player) ):
+        return float("inf")
     
-    opposite_score = two_stone_one_block(game, player, computer) + two_stone_no_block(game, player, computer) + three_stone_one_block(game, player, computer) + three_stone_no_block(game, player, computer) + four_stone_two_block(game, player, computer) + four_stone_one_block(game, player, computer) + four_stone_no_block(game, player, computer) + five_stone(game, player, computer)
+    if ( five_stone(game, player, computer) ):
+        return float("-inf")
+    
+    evaluation_score = two_stone_one_block(game, computer, player) + two_stone_no_block(game, computer, player) + three_stone_one_block(game, computer, player) + three_stone_no_block(game, computer, player) + four_stone_two_block(game, computer, player) + four_stone_one_block(game, computer, player) + four_stone_no_block(game, computer, player)
+    
+    opposite_score = two_stone_one_block(game, player, computer) + two_stone_no_block(game, player, computer) + three_stone_one_block(game, player, computer) + three_stone_no_block(game, player, computer) + four_stone_two_block(game, player, computer) + four_stone_one_block(game, player, computer) + four_stone_no_block(game, player, computer)
 
     search_score = evaluation_score - 1.5 * opposite_score
     
@@ -403,39 +409,42 @@ def five_stone(game, target, opposite): # 다섯 돌이 모여있을 때
     global outbounds
     all_points = game[target] + game[opposite]
     block_points = outbounds + game[opposite]
-    score = 0
+    endGame = False
     
     for (col, row) in game[target]:
-        # target + target + target + target + target
-        if ((col, row+1) in game[target]) and ((col, row+2) in game[target]) and ((col, row+3) in game[target]) and ((col, row+4) in game[target]):
-            score += 300000
+        # not target + target + target + target + target + target + not target
+        if ((col, row+1) in game[target]) and ((col, row+2) in game[target]) and ((col, row+3) in game[target]) and ((col, row+4) in game[target]) and ((col, row+4) not in game[target]) and ((col, row-1) not in game[target]):
+            endGame = True
+            
+        # not target +
+        # target + 
+        # target + 
+        # target + 
+        # target + 
+        # target + 
+        # not target
+        if ((col+1, row) in game[target]) and ((col+2, row) in game[target]) and ((col+3, row) in game[target]) and ((col+4, row) in game[target]) and ((col+5, row) not in game[target]) and ((col-1, row) not in game[target]):  
+            endGame = True
+            
+        # not target +     
+        #               target + 
+        #                         target + 
+        #                                     target + 
+        #                                                 target + 
+        #                                                             target + 
+        #                                                                       not target
+        if ((col+1, row+1) in game[target]) and ((col+2, row+2) in game[target]) and ((col+3, row+3) in game[target]) and ((col+4, row+4) in game[target]) and ((col+5, row+5) not in game[target]) and ((col-1, row-1) not in game[target]):
+            endGame = True
             
         
-        # target + 
-        # target + 
-        # target + 
-        # target + 
-        # target
-        if ((col+1, row) in game[target]) and ((col+2, row) in game[target]) and ((col+3, row) in game[target]) and ((col+4, row) in game[target]):
-            score += 300000
-            
-            
-        # target + 
-        #           target + 
-        #                       target + 
-        #                                   target + 
-        #                                               target
-        if ((col+1, row+1) in game[target]) and ((col+2, row+2) in game[target]) and ((col+3, row+3) in game[target]) and ((col+4, row+4) in game[target]):
-            score += 300000
-            
-        
-        #                                               target        
-        #                                   target + 
-        #                       target + 
-        #           target + 
-        # target + 
-        if ((col-1, row+1) in game[target]) and ((col-2, row+2) in game[target]) and ((col-3, row+3) in game[target]) and ((col-4, row+4) in game[target]):
-            score += 300000
-            
-            
-    return score
+        #                                                                       not target
+        #                                                             target +       
+        #                                                 target + 
+        #                                     target + 
+        #                         target + 
+        #               target + 
+        # not target + 
+        if ((col-1, row+1) in game[target]) and ((col-2, row+2) in game[target]) and ((col-3, row+3) in game[target]) and ((col-4, row+4) in game[target]) and ((col-5, row+5) not in game[target]) and ((col+1, row-1) not in game[target]):
+            endGame = True
+                        
+    return endGame

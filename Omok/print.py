@@ -12,12 +12,15 @@ for i in range(1, 20):
 def draw(point): 
     global board, num
     
-    col, row = point
+    if(point == "init"):
+        num = num * (-1)
+    else:
+        col, row = point
 
-    if(num == -1):
-        board[col][row] = "B "
-    elif(num == 1):
-        board[col][row] = "W "
+        if(num == -1):
+            board[col][row] = "B "
+        elif(num == 1):
+            board[col][row] = "W "
     num = num * (-1)
     
     for i in board:
@@ -25,3 +28,5 @@ def draw(point):
         for j in range(len(i)):
             str += i[j]
         print(str)
+    print("\n")
+    

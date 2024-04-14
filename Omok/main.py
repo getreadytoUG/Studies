@@ -21,7 +21,8 @@ if __name__ == "__main__":
     if ( player == "b" ): # player 가 선공
         computer = "w"
         game = game_init()
-
+        p.draw("init")
+        
         while(True):
             player_choice = input("검은돌을 놓을 자리를 선택하세요 ex) 4,a : ")
 
@@ -36,6 +37,8 @@ if __name__ == "__main__":
 
             game["b"].append(player_position)
 
+            pre_game = {"b": game["b"].copy(), "w": game["w"].copy()}
+            
             state, color = et.state_func(game)
             if (state == "end"):
                 print(state)
@@ -44,6 +47,15 @@ if __name__ == "__main__":
             computer_position = cc.make_computer_choice(game, computer)
             game["w"].append(computer_position)
 
+            post_game = {"b": game["b"].copy(), "w": game["w"].copy()}
+            
+            computer_giveup = et.is_computer_giveup(pre_game, post_game)
+
+            if ( computer_giveup ):
+                print("computer 가 포기하였습니다.")
+                color = player
+                break
+            
             p.draw(computer_position)
             
             state, color = et.state_func(game)
@@ -72,9 +84,11 @@ if __name__ == "__main__":
                 print("이미 두어진 장소입니다.")
                 continue
 
+            p.draw(player_position)
+            
             game["w"].append(player_position)
 
-            p.draw(player_position)
+            pre_game = {"b": game["b"].copy(), "w": game["w"].copy()}
             
             state, color = et.state_func(game)
             if(state == "end"):
@@ -84,6 +98,15 @@ if __name__ == "__main__":
             computer_position = cc.make_computer_choice(game, computer)
             game["b"].append(computer_position)
 
+            post_game = {"b": game["b"].copy(), "w": game["w"].copy()}
+            
+            computer_giveup = et.is_computer_giveup(pre_game, post_game)
+            
+            if ( computer_giveup ):
+                print("computer 가 포기하였습니다.")
+                color = player
+                break
+            
             p.draw(computer_position)
             
             state, color = et.state_func(game)

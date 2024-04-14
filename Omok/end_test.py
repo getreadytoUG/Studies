@@ -56,3 +56,13 @@ def state_func(game): # 해당 game 이 종료 되었는지 아닌지를 판단
         if ( left_down_case(i, points) ):
             return "end", color
     return "during", color
+
+
+def is_computer_giveup(pre_game, post_game): # 컴퓨터가 계산을 통하여 값을 낼 수 없을 때 포기한 것으로 간주
+    result = False 
+    
+    if (pre_game == post_game):
+        result = True 
+    
+    return result
+    
