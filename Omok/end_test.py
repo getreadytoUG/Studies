@@ -46,6 +46,10 @@ def state_func(game): # 해당 game 이 종료 되었는지 아닌지를 판단
 
     points = game[color]
     
+    all_points = game["b"] + game["w"]
+    if ( len(all_points) == 19 * 19):
+        return "draw", color
+    
     for i in points:
         if ( right_case(i, points) ):
             return "end", color

@@ -40,7 +40,7 @@ if __name__ == "__main__":
             pre_game = {"b": game["b"].copy(), "w": game["w"].copy()}
             
             state, color = et.state_func(game)
-            if (state == "end"):
+            if (state == "end") or (state =="draw"):
                 print(state)
                 break
 
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             p.draw(computer_position)
             
             state, color = et.state_func(game)
-            if (state == "end"):
+            if (state == "end") or (state =="draw"):
                 print(state)
                 break
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
             pre_game = {"b": game["b"].copy(), "w": game["w"].copy()}
             
             state, color = et.state_func(game)
-            if(state == "end"):
+            if(state == "end") or (state =="draw"):
                 print(state)
                 break
             
@@ -110,7 +110,7 @@ if __name__ == "__main__":
             p.draw(computer_position)
             
             state, color = et.state_func(game)
-            if(state == "end"):
+            if(state == "end") or (state =="draw"):
                 print(state)
                 break
 
@@ -119,6 +119,8 @@ if __name__ == "__main__":
 
     if not player: # 오타
         print("다시 시작해 주세요")
+    elif (state == "draw"): # 비겼을 경우
+        print("비겼습니다.")
     elif (player == color): # player 승리 부분
         print("player가 승리하였습니다.")
     else: # computer 승리 부분
